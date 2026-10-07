@@ -1,0 +1,841 @@
+/* ============================================================
+   RELATOS DE PAPEL — MAIN CSS
+   Estructura:
+   1. Variables
+   2. Reset y base
+   3. Layout general
+   4. Componentes
+   5. Páginas
+   6. Responsive
+   ============================================================ */
+
+
+/* ============================================================
+   1. VARIABLES
+   ============================================================ */
+
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+
+  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
+            rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --shadow-sm: rgba(0, 0, 0, 0.05) 0 1px 3px 0,
+               rgba(0, 0, 0, 0.03) 0 1px 2px 0;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  --radius: 8px;
+  --radius-sm: 4px;
+
+  font: 16px/1.6 var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+
+    --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px,
+              rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    --shadow-sm: rgba(0, 0, 0, 0.2) 0 1px 3px 0,
+                 rgba(0, 0, 0, 0.1) 0 1px 2px 0;
+  }
+}
+
+
+/* ============================================================
+   2. RESET Y BASE
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+#root {
+  width: 1280px;
+  max-width: 100%;
+  min-height: 100svh;
+  margin: 0 auto;
+  border-inline: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--heading), sans-serif;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 2rem;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 1.25rem;
+  letter-spacing: -0.2px;
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--sans), sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text-h);
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+
+button:hover {
+  background: var(--code-bg);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  font-family: var(--sans), sans-serif;
+  font-size: 0.9375rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text-h);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+
+/* ============================================================
+   3. LAYOUT GENERAL
+   ============================================================ */
+
+/* Header global, normalmente Header.jsx */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+}
+
+.site-header > span {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+  user-select: none;
+}
+
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.site-header nav > span {
+  font-size: 0.875rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.site-header nav > span:hover {
+  color: var(--text-h);
+}
+
+/* Wrapper de página */
+.app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1.5rem 2rem;
+}
+
+/* Cabecera interna de páginas, por ejemplo HomePage */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.header h1 {
+  font-size: 1.4rem;
+  white-space: nowrap;
+}
+
+/* Layout de HomePage: filtro | libros | carrito */
+.page-layout {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+}
+
+main.book-list {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Grid de libros. Se aplica al div interno de BookList.jsx */
+div.book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+div.book-list a {
+  display: flex;
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* ============================================================
+   4. COMPONENTES
+   ============================================================ */
+
+/* PriceTag */
+.price-tag {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* SearchBar */
+.search-bar {
+  width: 260px;
+  max-width: 100%;
+}
+
+/* OrderCard */
+.order-card {
+  margin-bottom: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--code-bg);
+}
+
+.order-card:last-child {
+  margin-bottom: 0;
+}
+
+.order-card > p {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.order-card ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.order-card li {
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+/* BookCard */
+.book-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.book-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.book-card h2 {
+  margin-bottom: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-h);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-card p {
+  margin-bottom: 0.15rem;
+  font-size: 0.775rem;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.book-card p:last-child {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* GenreFilter */
+.genre-filter {
+  width: 185px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 76px;
+}
+
+.genre-filter h3 {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+/* Scroll individual del filtro */
+.genre-filter-list,
+.genre-filter ul {
+  max-height: calc(100svh - 150px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding-right: 0.25rem;
+}
+
+.genre-filter li label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.genre-filter li label:hover {
+  background: var(--accent-bg);
+  color: var(--text-h);
+}
+
+.genre-filter li input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Cart */
+.cart {
+  width: 260px;
+  max-height: calc(100svh - 96px);
+  overflow-y: auto;
+  flex-shrink: 0;
+  position: sticky;
+  top: 76px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.cart h2 {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.cart > p {
+  margin-bottom: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.cart-item {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cart-item strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.825rem;
+  line-height: 1.3;
+  color: var(--text-h);
+}
+
+.cart-item p {
+  font-size: 0.775rem;
+  color: var(--text);
+}
+
+.cart-item button {
+  margin-top: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border-color: #fca5a5;
+  background: transparent;
+  font-size: 0.75rem;
+  color: #ef4444;
+}
+
+.cart-item button:hover {
+  background: #fee2e2;
+}
+
+.cart > button:last-child {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.6rem;
+  border-color: var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.cart > button:last-child:hover {
+  opacity: 0.88;
+}
+
+
+/* ============================================================
+   5. PÁGINAS
+   ============================================================ */
+
+/* LandingPage */
+.landing-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.landing-page h1 {
+  max-width: 560px;
+  font-size: 2.75rem;
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+
+.landing-page button {
+  padding: 0.7rem 1.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+}
+
+.landing-page button:first-of-type {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.landing-page button:first-of-type:hover {
+  opacity: 0.88;
+}
+
+/* LoginPage */
+.app > main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 0;
+}
+
+.app > main form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.app > main form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+}
+
+.app > main form label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.app > main form button[type="submit"] {
+  padding: 0.65rem;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9375rem;
+}
+
+.app > main form button[type="submit"]:hover {
+  opacity: 0.88;
+}
+
+/* BookDetailPage */
+.page-layout > main:not(.book-list) {
+  flex: 1;
+  min-width: 0;
+  padding: 1.5rem 0 2rem;
+}
+
+.page-layout > main:not(.book-list) > a {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.page-layout > main:not(.book-list) > a:hover {
+  color: var(--accent);
+}
+
+.book-detail-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+}
+
+.book-detail-content img {
+  width: 220px;
+  flex-shrink: 0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  object-fit: cover;
+}
+
+.book-detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-detail-info h1 {
+  margin-bottom: 1.25rem;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.book-detail-info p {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.book-detail-info p:first-of-type {
+  border-top: 1px solid var(--border);
+}
+
+.book-detail-info button {
+  align-self: flex-start;
+  margin-top: 1.75rem;
+  padding: 0.7rem 1.75rem;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9375rem;
+}
+
+.book-detail-info button:hover {
+  opacity: 0.88;
+}
+
+/* CheckoutPage */
+.checkout-page {
+  width: 100%;
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.checkout-page > h1 {
+  margin-bottom: 0.25rem;
+}
+
+.checkout-page > h2:first-of-type {
+  margin: 1.5rem 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+.checkout-page > div {
+  margin-bottom: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.checkout-page > div h3 {
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+}
+
+.checkout-page > div p {
+  margin-bottom: 0.2rem;
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+.checkout-page > h2:last-of-type {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--border);
+  font-size: 1.25rem;
+  color: var(--text-h);
+}
+
+.checkout-page > button {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  border-color: var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.checkout-page > button:hover {
+  opacity: 0.88;
+}
+
+/* ProfilePage */
+.profile-page {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 1.5rem 0 3rem;
+}
+
+.profile-page > h1 {
+  margin-bottom: 0;
+}
+
+.profile-page > a {
+  align-self: flex-start;
+  margin-top: -1.25rem;
+  font-size: 0.875rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.profile-page > a:hover {
+  color: var(--accent);
+}
+
+.profile-page section {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-page section > h2 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+.profile-page section > p {
+  margin-bottom: 0.4rem;
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.profile-page section > p strong {
+  margin-right: 0.25rem;
+  color: var(--text-h);
+}
+
+
+/* ============================================================
+   6. RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 960px) {
+  .page-layout {
+    flex-direction: column;
+    padding: 1rem 0;
+  }
+
+  .genre-filter {
+    width: 100%;
+    max-height: none;
+    position: static;
+  }
+
+  .genre-filter-list,
+  .genre-filter ul {
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  .cart {
+    width: 100%;
+    max-height: 320px;
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-header {
+    padding: 0 1rem;
+  }
+
+  .app {
+    padding: 0 1rem 2rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header h1 {
+    white-space: normal;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  div.book-list {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+
+  .book-detail-content {
+    flex-direction: column;
+  }
+
+  .book-detail-content img {
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+}

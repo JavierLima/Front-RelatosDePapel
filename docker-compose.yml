@@ -1,0 +1,135 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: library-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/init:/docker-entrypoint-initdb.d
+    networks:
+      - library-network
+
+  redis:
+    image: redis:7
+    container_name: library-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - library-network
+
+  eureka-server:
+    build: ./backend/eureka-server
+    container_name: library-eureka
+    restart: unless-stopped
+    ports:
+      - "8761:8761"
+    networks:
+      - library-network
+
+  catalogue:
+    build: ./backend/catalogue
+    container_name: library-catalogue
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - eureka-server
+    environment:
+      EUREKA_INSTANCE_HOSTNAME: catalogue
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/catalogue_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8081:8081"
+    networks:
+      - library-network
+
+  orders:
+    build: ./backend/orders
+    container_name: library-orders
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - eureka-server
+      - catalogue
+    environment:
+      EUREKA_INSTANCE_HOSTNAME: orders
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/orders_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8082:8082"
+    networks:
+      - library-network
+
+  users:
+    build: ./backend/users
+    container_name: library-users
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - redis
+      - eureka-server
+    environment:
+      EUREKA_INSTANCE_HOSTNAME: users
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/users_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "8084:8084"
+    networks:
+      - library-network
+
+  comms:
+    build: ./backend/comms
+    container_name: library-comms
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - users
+    environment:
+      EUREKA_INSTANCE_HOSTNAME: comms
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "8083:8083"
+    networks:
+      - library-network
+
+  api-gateway:
+    build: ./backend/api-gateway
+    container_name: library-gateway
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - catalogue
+      - orders
+      - users
+      - comms
+    environment:
+      EUREKA_INSTANCE_HOSTNAME: api-gateway
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8080:8080"
+    networks:
+      - library-network
+
+volumes:
+  mysql_data:
+
+networks:
+  library-network:
+    driver: bridge
