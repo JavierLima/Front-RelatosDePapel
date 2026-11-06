@@ -1,6 +1,6 @@
 import { getAccessToken } from "./authApi.js"
 
-const API_BASE_URL = "http://localhost:8080/api/orders"
+const API_BASE_URL = `${import.meta.env.VITE_GATEWAY_URL ?? ""}/api/orders`
 
 export async function createOrder(bookId, quantity) {
     const token = getAccessToken();

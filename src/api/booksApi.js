@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8080/api/books";
+const API_BASE_URL = `${import.meta.env.VITE_GATEWAY_URL ?? ""}/api/books`;
 
 export async function getBooks() {
     const response = await fetch(API_BASE_URL);

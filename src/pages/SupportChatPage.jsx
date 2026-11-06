@@ -6,7 +6,9 @@ function SupportChatPage() {
     const socketRef = useRef(null)
 
     useEffect(() => {
-        const socket = new WebSocket("ws://localhost:8080/ws/support")
+        const commsUrl = import.meta.env.VITE_COMMS_URL
+            || `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}`
+        const socket = new WebSocket(`${commsUrl}/ws/support`)
         socketRef.current = socket
 
         socket.onmessage = (event) => {
